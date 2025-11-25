@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>渊穹科技综合联合体 | ANSTC</title>
+    <meta name="description" content="徐州市第一中学 - 渊穹科技综合联合体官方网站" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              anstc: {
+                black: '#020204',
+                dark: '#0a0a0c',
+                accent: '#3b82f6',
+              }
+            },
+            fontFamily: {
+              sans: ['"Noto Sans SC"', 'sans-serif'],
+              tech: ['"Orbitron"', 'sans-serif'],
+              mono: ['"Share Tech Mono"', 'monospace'],
+            },
+            animation: {
+              'blob': 'blob 15s infinite',
+              'float': 'float 6s ease-in-out infinite',
+              'glow': 'glow 3s ease-in-out infinite alternate',
+            },
+            keyframes: {
+              blob: {
+                '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                '100%': { transform: 'translate(0px, 0px) scale(1)' },
+              },
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-10px)' },
+              },
+              glow: {
+                'from': { opacity: 0.5, filter: 'blur(10px)' },
+                'to': { opacity: 1, filter: 'blur(20px)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+      body {
+        background-color: #020204;
+        color: #e5e5e5;
+        overflow-x: hidden;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar { width: 6px; }
+      ::-webkit-scrollbar-track { background: #020204; }
+      ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+      ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+      
+      /* Liquid Glass Utilities */
+      .glass-panel {
+        background: rgba(255, 255, 255, 0.02);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      }
+      
+      .glass-card {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+      }
+      
+      .glass-card:hover {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px 0 rgba(37, 99, 235, 0.15);
+      }
+
+      .text-glow {
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      }
+      
+      .gradient-text {
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        background-image: linear-gradient(to right, #fff, #94a3b8);
+      }
+    </style>
+
+    <!-- STRICT IMPORT MAP -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client?deps=react@18.2.0",
+    "framer-motion": "https://esm.sh/framer-motion@10.16.4?deps=react@18.2.0,react-dom@18.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0?deps=react@18.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
+  }
+}
+</script>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+      import React, { useState, useEffect, useRef } from 'react';
+      import { createRoot } from 'react-dom/client';
+      import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
+      import { 
+        Atom, Cpu, Rocket, Microscope, Zap, FlaskConical, 
+        ShieldAlert, Database, Menu, X, ArrowRight, 
+        Github, Mail, MapPin, ChevronDown, Stars, Sparkles,
+        Gamepad2, Feather, Camera, Radio, HeartPulse, Palette
+      } from 'lucide-react';
+
+      // --- 1. Data Constants ---
+      const DEPARTMENTS = [
+        {
+          id: 'S.H.A.C.D',
+          name: '航空航天部',
+          englishName: 'Aerospace & Aeronautics',
+          icon: Rocket,
+          description: '探索大气层内外的飞行器技术，从模型火箭到无人机系统的设计与研发。',
+          color: 'text-blue-400'
+        },
+        {
+          id: 'N.N.C.S.I',
+          name: '人工智能与信息',
+          englishName: 'AI & Info Tech',
+          icon: Cpu,
+          description: '神经网络、算法优化及校园信息化系统的核心架构部门。',
+          color: 'text-cyan-400'
+        },
+        {
+          id: 'B.S.D.T.I',
+          name: '生物生态部',
+          englishName: 'Bio-Eco Systems',
+          icon: Microscope,
+          description: '微观生物学研究与宏观生态系统模拟，探索生命的奥秘。',
+          color: 'text-emerald-400'
+        },
+        {
+          id: 'C.C.E.R.E',
+          name: '天文学部',
+          englishName: 'Cosmic Research',
+          icon: Atom,
+          description: '深空观测、天体物理理论研究及天文摄影。',
+          color: 'text-violet-400'
+        },
+        {
+          id: 'I.F.A.E.C',
+          name: '工程构件科',
+          englishName: 'Engineering',
+          icon: Zap,
+          description: '精密机械结构设计、3D打印技术应用及自动化控制系统。',
+          color: 'text-amber-400'
+        },
+        {
+          id: 'G.C.T',
+          name: '通用化学技术',
+          englishName: 'General Chemistry',
+          icon: FlaskConical,
+          description: '新材料合成、化学反应动力学研究及实验室安全规范制定。',
+          color: 'text-teal-400'
+        },
+        {
+          id: 'I.G.D',
+          name: '第九艺术开发',
+          englishName: 'Game Development',
+          icon: Gamepad2,
+          description: '为有独立游戏开发意愿学生设立，代码与艺术的完美融合。',
+          color: 'text-rose-400'
+        },
+        {
+          id: 'I.P.D',
+          name: '墨枢编辑部',
+          englishName: 'InkPivot Editorial',
+          icon: Feather,
+          description: '文学与艺术编辑交流部门，以文学艺术交流为主。',
+          color: 'text-slate-300'
+        },
+        {
+          id: 'P.V.U',
+          name: '摄影技术部',
+          englishName: 'Photography & Video',
+          icon: Camera,
+          description: '由摄影摄像技术特长学生组成，提供专业视觉支持。',
+          color: 'text-indigo-400'
+        },
+        {
+          id: 'R.T.D',
+          name: '无线电技术部',
+          englishName: 'Radio & Telecom',
+          icon: Radio,
+          description: '无线电通讯爱好者聚集地，持有个人无线电呼号。',
+          color: 'text-orange-400'
+        },
+        {
+          id: 'O.C.D',
+          name: 'OC概念设计',
+          englishName: 'Concept Design',
+          icon: Palette,
+          description: '原创概念设计特长学生组成，负责视觉与概念开发。',
+          color: 'text-fuchsia-400'
+        },
+        {
+          id: 'G.M.F',
+          name: '通用医学部',
+          englishName: 'General Medicine',
+          icon: HeartPulse,
+          description: '医学与急救学特长学生组成，普及医学常识。',
+          color: 'text-red-400'
+        }
+      ];
+
+      const NAV_LINKS = [
+        { name: '首页', href: '#hero' },
+        { name: '联合体宗旨', href: '#mission' },
+        { name: '组织架构', href: '#departments' },
+        { name: '加入我们', href: '#contact' },
+      ];
+
+      // --- 2. Visual Components ---
+
+      // Liquid Background Component
+      const LiquidBackground = () => {
+        return (
+          <div className="fixed inset-0 -z-10 overflow-hidden bg-[#020204]">
+            {/* Animated Gradient Blobs */}
+            <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+            <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+            <div className="absolute -bottom-8 left-20 w-72 h-72 bg-indigo-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-900 rounded-full mix-blend-overlay filter blur-[100px] opacity-30 animate-pulse"></div>
+            
+            {/* Noise Texture */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
+          </div>
+        );
+      };
+
+      // Logo
+      const Logo = ({ className }) => {
+        return (
+          <div className={`relative flex items-center justify-center ${className}`}>
+            <motion.div 
+              className="absolute inset-0 border border-white/20 rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+            />
+            <motion.div 
+              className="absolute inset-2 border border-blue-500/30 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              style={{ borderBottomColor: 'transparent' }}
+            />
+            <div className="relative z-10 font-tech font-bold tracking-tighter text-white flex flex-col items-center leading-none drop-shadow-lg">
+              <span className="text-2xl tracking-widest">ANSTC</span>
+              <span className="text-[0.5rem] tracking-[0.3em] mt-1 text-blue-400/80">NEXUS</span>
+            </div>
+          </div>
+        );
+      };
+
+      // Hero Section
+      const Hero = () => {
+        const { scrollY } = useScroll();
+        const y1 = useTransform(scrollY, [0, 500], [0, 150]);
+        const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+        return (
+          <section id="hero" className="relative h-screen w-full flex items-center justify-center overflow-hidden">
+            <motion.div style={{ y: y1, opacity }} className="relative z-10 text-center px-4 max-w-6xl mx-auto">
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="mb-8 flex justify-center"
+              >
+                <div className="glass-panel px-4 py-1.5 rounded-full flex items-center gap-2">
+                   <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+                   <span className="text-gray-300 font-mono text-xs tracking-widest">EST. 2024 · XUZHOU NO.1 MIDDLE SCHOOL</span>
+                </div>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                transition={{ duration: 1.2, delay: 0.2 }}
+                className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter mb-8 font-sans leading-none"
+              >
+                <span className="block gradient-text">渊穹科技</span>
+                <span className="block text-4xl md:text-6xl lg:text-7xl mt-2 font-light text-white/60 tracking-widest">综合联合体</span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="text-sm md:text-lg text-blue-200/60 max-w-2xl mx-auto font-mono mb-16 tracking-widest"
+              >
+                AETHER NEXUS SCIENCE TECHNOLOGY CONSORTIUM
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+                className="flex flex-col md:flex-row gap-6 justify-center items-center"
+              >
+                <a href="#departments" className="group relative px-8 py-4 bg-white/5 hover:bg-white/10 backdrop-blur-md border border-white/10 text-white font-bold font-mono tracking-widest overflow-hidden rounded-lg transition-all hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+                  <span className="relative z-10 flex items-center gap-2">
+                    探索部门 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </a>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.5, duration: 1 }}
+              className="absolute bottom-10 left-1/2 -translate-x-1/2"
+            >
+              <ChevronDown className="w-6 h-6 text-white/30 animate-bounce" />
+            </motion.div>
+          </section>
+        );
+      };
+
+      // Minimalist Badge Card
+      const BadgeCard = ({ dept, index }) => {
+        const Icon = dept.icon;
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: index * 0.05 }}
+            whileHover={{ y: -5 }}
+            className="glass-card rounded-2xl p-6 h-full flex flex-col relative group overflow-hidden"
+          >
+            {/* Ambient Glow on Hover */}
+            <div className="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-colors duration-500"></div>
+            
+            <div className="flex justify-between items-start mb-6 relative z-10">
+              <div className={`p-3 rounded-xl bg-white/5 border border-white/5 text-white group-hover:scale-110 transition-transform duration-300 ${dept.color}`}>
+                <Icon size={24} strokeWidth={1.5} />
+              </div>
+              <span className="font-mono text-[10px] text-white/20 tracking-widest border border-white/10 px-2 py-1 rounded-full">
+                {dept.id}
+              </span>
+            </div>
+
+            <div className="flex-grow relative z-10">
+              <h3 className="text-lg font-bold text-gray-100 mb-1 tracking-wide group-hover:text-white transition-colors">{dept.name}</h3>
+              <p className="text-[10px] font-mono text-gray-500 uppercase mb-4 tracking-wider">{dept.englishName}</p>
+              <p className="text-sm text-gray-400 leading-relaxed font-light">
+                {dept.description}
+              </p>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-white/5 flex justify-between items-center relative z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="text-[10px] font-mono text-blue-400">ACCESS_GRANTED</span>
+              <ArrowRight size={12} className="text-white/50" />
+            </div>
+          </motion.div>
+        );
+      };
+
+      // Mission Section
+      const MissionSection = () => {
+        return (
+          <section id="mission" className="py-32 relative">
+            <div className="container mx-auto px-6 relative z-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <h2 className="text-5xl md:text-7xl font-bold text-white mb-8 leading-tight tracking-tighter">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">未来</span>
+                    <br />由此定义
+                  </h2>
+                  <div className="space-y-8 text-lg font-light text-gray-300">
+                    <p className="leading-relaxed border-l border-white/10 pl-6">
+                      <strong className="text-white block mb-2 text-xl">渊穹科技综合联合体</strong> 
+                      不仅仅是一个社团，它是徐州一中校园内的一座前沿科技灯塔。我们致力于打破传统学科的界限，将抽象的理论转化为可触摸的现实。
+                    </p>
+                    <div className="grid grid-cols-2 gap-6">
+                       <div className="glass-panel p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-white mb-1">12+</div>
+                          <div className="text-xs text-gray-500 font-mono">Core Divisions</div>
+                       </div>
+                       <div className="glass-panel p-4 rounded-lg">
+                          <div className="text-2xl font-bold text-white mb-1">2024</div>
+                          <div className="text-xs text-gray-500 font-mono">Founded</div>
+                       </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                  className="relative h-[600px] w-full glass-card rounded-3xl flex flex-col justify-center items-center overflow-hidden"
+                >
+                   {/* Liquid Orb inside card */}
+                   <div className="absolute w-64 h-64 bg-blue-500/30 rounded-full blur-3xl animate-blob"></div>
+                   <div className="absolute w-48 h-48 bg-purple-500/30 rounded-full blur-3xl animate-blob animation-delay-2000 top-1/4 right-1/4"></div>
+                   
+                   <div className="relative z-10 text-center">
+                      <div className="w-24 h-24 mx-auto mb-6 rounded-full border border-white/10 flex items-center justify-center glass-panel">
+                         <Atom size={40} className="text-white animate-spin-slow" />
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-2">ANSTC VISION</h3>
+                      <p className="text-gray-400 font-mono text-sm">INNOVATION · EXPLORATION · UNITY</p>
+                   </div>
+                   
+                   {/* Grid lines */}
+                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+        );
+      };
+
+      // Main App
+      const App = () => {
+        const [isMenuOpen, setIsMenuOpen] = useState(false);
+        const [scrolled, setScrolled] = useState(false);
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        return (
+          <div className="min-h-screen font-sans selection:bg-blue-500/30 selection:text-white relative">
+            <LiquidBackground />
+
+            {/* Navbar */}
+            <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'glass-panel border-b border-white/5 py-4' : 'bg-transparent py-8'}`}>
+              <div className="container mx-auto px-6 flex justify-between items-center">
+                <a href="#" className="flex items-center gap-3 group">
+                  <div className="w-8 h-8 bg-white/10 backdrop-blur border border-white/10 rounded-full flex items-center justify-center font-bold font-tech text-white group-hover:bg-white group-hover:text-black transition-all duration-300">
+                      A
+                  </div>
+                  <span className="font-bold text-sm tracking-[0.2em] font-tech hidden sm:block text-white/80 group-hover:text-white transition-colors">ANSTC</span>
+                </a>
+
+                {/* Desktop Nav */}
+                <div className="hidden md:flex items-center gap-8">
+                  {NAV_LINKS.map((link) => (
+                    <a 
+                      key={link.name} 
+                      href={link.href} 
+                      className="text-xs font-mono text-gray-400 hover:text-white transition-all uppercase tracking-widest"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                  <button className="ml-4 px-6 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-bold rounded-full transition-all backdrop-blur-sm hover:border-white/30">
+                    CONSOLE
+                  </button>
+                </div>
+
+                {/* Mobile Menu Button */}
+                <button 
+                  className="md:hidden text-white p-2 glass-panel rounded-lg"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                  {isMenuOpen ? <X /> : <Menu />}
+                </button>
+              </div>
+            </nav>
+
+            {/* Mobile Menu */}
+            <AnimatePresence>
+              {isMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                  animate={{ opacity: 1, backdropFilter: "blur(20px)" }}
+                  exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                  className="fixed inset-0 z-40 bg-black/60 pt-24 px-6 md:hidden"
+                >
+                  <div className="flex flex-col gap-4">
+                    {NAV_LINKS.map((link) => (
+                      <a
+                        key={link.name}
+                        href={link.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className="text-xl font-light text-white/80 hover:text-white border border-white/10 p-6 rounded-xl bg-white/5 backdrop-blur-xl"
+                      >
+                        {link.name}
+                      </a>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <main>
+              <Hero />
+              
+              <MissionSection />
+
+              {/* Departments Grid */}
+              <section id="departments" className="py-24 relative">
+                <div className="container mx-auto px-6 relative z-10">
+                  <div className="mb-24 text-left border-b border-white/10 pb-8 flex flex-col md:flex-row justify-between items-end">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <h2 className="text-4xl md:text-5xl font-bold text-white mb-2 font-sans tracking-tight">
+                        组织架构
+                      </h2>
+                      <p className="text-gray-500 font-mono text-xs tracking-widest">ORGANIZATION STRUCTURE</p>
+                    </motion.div>
+                    <div className="hidden md:block text-right text-gray-600 font-mono text-[10px]">
+                      SYSTEM_STATUS: OPERATIONAL<br/>
+                      NODES: {DEPARTMENTS.length}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {DEPARTMENTS.map((dept, index) => (
+                      <BadgeCard key={dept.id} dept={dept} index={index} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* Call to Action */}
+              <section id="contact" className="py-32 relative overflow-hidden">
+                 <div className="container mx-auto px-6 text-center relative z-10">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileInView={{ scale: 1, opacity: 1 }}
+                      transition={{ duration: 0.8 }}
+                      className="mb-12"
+                    >
+                      <Logo className="w-24 h-24 mx-auto" />
+                    </motion.div>
+                    
+                    <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white tracking-tight">
+                      加入<span className="text-blue-500">渊穹</span>
+                    </h2>
+                    <p className="text-gray-400 mb-12 max-w-xl mx-auto text-lg font-light">
+                      在未知的边缘试探，于科学的深海潜行。
+                    </p>
+                    
+                    <button className="group relative px-10 py-4 glass-panel rounded-full overflow-hidden hover:bg-white/10 transition-all duration-300">
+                      <span className="relative z-10 text-white font-bold tracking-widest text-sm">APPLY FOR MEMBERSHIP</span>
+                      <div className="absolute inset-0 bg-blue-600/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </button>
+                 </div>
+              </section>
+            </main>
+
+            {/* Footer */}
+            <footer className="border-t border-white/5 py-16 relative z-10 bg-black/20 backdrop-blur-lg">
+              <div className="container mx-auto px-6">
+                <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+                  <div>
+                    <div className="flex items-center gap-2 mb-6">
+                      <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[10px] font-bold text-black">A</div>
+                      <span className="font-bold font-tech text-lg text-white tracking-widest">ANSTC</span>
+                    </div>
+                    <p className="text-gray-500 text-xs leading-relaxed max-w-xs font-mono">
+                      Xuzhou No.1 Middle School<br/>
+                      Science Technology Consortium
+                    </p>
+                  </div>
+                  
+                  <div className="flex gap-12">
+                    <div>
+                      <h4 className="font-bold text-white mb-4 text-xs uppercase tracking-widest text-gray-500">Contact</h4>
+                      <div className="space-y-2 text-gray-400 text-sm">
+                        <a href="#" className="block hover:text-white transition-colors">Email</a>
+                        <a href="#" className="block hover:text-white transition-colors">Location</a>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white mb-4 text-xs uppercase tracking-widest text-gray-500">Social</h4>
+                      <div className="space-y-2 text-gray-400 text-sm">
+                        <a href="#" className="block hover:text-white transition-colors">Github</a>
+                        <a href="#" className="block hover:text-white transition-colors">Bilibili</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-t border-white/5 mt-12 pt-8 flex justify-between items-center text-[10px] text-gray-600 font-mono">
+                  <p>&copy; 2024 ANSTC. All rights reserved.</p>
+                  <p>LIQUID GLASS UI // VER 2.0</p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        );
+      };
+
+      const root = createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
